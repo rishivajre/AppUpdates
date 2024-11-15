@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boundary Value & Equivalence Partitioning Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background-color: #f0f0f0;
+      box-shadow: 10px 10px 20px #d9d9d9, -10px -10px 20px #ffffff;
+      border-radius: 20px;
+      padding: 20px;
+      width: 90%;
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      height: auto;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+    }
+
+    .input-group label {
+      font-size: 1rem;
+      color: #333;
+      margin-bottom: 6px;
+    }
+
+    .input-group input {
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      background-color: #f0f0f0;
+      box-shadow: inset 5px 5px 10px #d9d9d9, inset -5px -5px 10px #ffffff;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .button {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      background-color: #f0f0f0;
+      box-shadow: 5px 5px 10px #d9d9d9, -5px -5px 10px #ffffff;
+      font-size: 1rem;
+      color: #333;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .button:hover {
+      box-shadow: inset 5px 5px 10px #d9d9d9, inset -5px -5px 10px #ffffff;
+    }
+
+    #output {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      background-color: #f0f0f0;
+      box-shadow: inset 5px 5px 10px #d9d9d9, inset -5px -5px 10px #ffffff;
+      font-size: 1rem;
+      color: #333;
+      white-space: pre-wrap;
+      overflow-y: auto;
+      max-height: 200px;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .button {
+        font-size: 0.9rem;
+        padding: 8px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .button-group {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .button {
+        flex: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Boundary Value & Equivalence Partitioning Calculator</h1>
+    <div class="input-group">
+      <label for="min-value">Minimum Value:</label>
+      <input type="number" id="min-value" placeholder="Enter minimum value">
+    </div>
+    <div class="input-group">
+      <label for="max-value">Maximum Value:</label>
+      <input type="number" id="max-value" placeholder="Enter maximum value">
+    </div>
+    <div class="input-group">
+      <label for="step-size">Step Size:</label>
+      <input type="number" id="step-size" placeholder="Enter step size" value="1">
+    </div>
+    <div class="button-group">
+      <button class="button" id="calculate">Calculate</button>
+      <button class="button" id="download">Download Test Data</button>
+      <button class="button" id="copy-to-clipboard">Copy to Clipboard</button>
+    </div>
+    <div id="output">
+      The calculated boundary values and equivalence classes will be displayed here.
+    </div>
+
+    <script>
+      // Same JavaScript as in the original
+      const minValueInput = document.getElementById('min-value');
+      const maxValueInput = document.getElementById('max-value');
+      const stepSizeInput = document.getElementById('step-size');
+      const calculateButton = document.getElementById('calculate');
+      const downloadButton = document.getElementById('download');
+      const copyToClipboardButton = document.getElementById('copy-to-clipboard');
+      const outputDiv = document.getElementById('output');
+
+      function calculateBoundaryValues() {
+        const minValue = parseFloat(minValueInput.value);
+        const maxValue = parseFloat(maxValueInput.value);
+        const stepSize = parseFloat(stepSizeInput.value);
+
+        if (isNaN(minValue) || isNaN(maxValue) || isNaN(stepSize)) {
+          outputDiv.textContent = 'Please enter valid minimum, maximum, and step size values.';
+          return;
+        }
+
+        const boundaryValues = [];
+        const equivalenceClasses = [];
+
+        boundaryValues.push(minValue - stepSize, minValue, minValue + stepSize);
+
+        let currentValue = minValue + stepSize;
+        while (currentValue < maxValue) {
+          boundaryValues.push(currentValue - stepSize / 2, currentValue, currentValue + stepSize / 2);
+          currentValue += stepSize;
+        }
+
+        boundaryValues.push(maxValue - stepSize, maxValue, maxValue + stepSize);
+
+        equivalenceClasses.push(`< ${minValue}`);
+        let currentClass = `${minValue} <= x <= ${minValue + stepSize - 0.01}`;
+        equivalenceClasses.push(currentClass);
+        currentValue = minValue + stepSize;
+        while (currentValue < maxValue) {
+          currentClass = `${currentValue} <= x <= ${currentValue + stepSize - 0.01}`;
+          equivalenceClasses.push(currentClass);
+          currentValue += stepSize;
+        }
+        equivalenceClasses.push(`> ${maxValue}`);
+
+        let output = 'Boundary Values:\n';
+        boundaryValues.forEach(value => {
+          output += `- ${value}\n`;
+        });
+        output += '\nEquivalence Classes:\n';
+        equivalenceClasses.forEach(ec => {
+          output += `- ${ec}\n`;
+        });
+
+        outputDiv.textContent = output;
+      }
+
+      function downloadTestData() {
+        const testData = outputDiv.textContent;
+        const downloadLink = document.createElement('a');
+        downloadLink.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(testData));
+        downloadLink.setAttribute('download', 'test-data.txt');
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+      }
+
+      function copyToClipboard() {
+        navigator.clipboard.writeText(outputDiv.textContent);
+        alert('Data copied to clipboard!');
+      }
+
+      calculateButton.addEventListener('click', calculateBoundaryValues);
+      downloadButton.addEventListener('click', downloadTestData);
+      copyToClipboardButton.addEventListener('click', copyToClipboard);
+    </script>
+  </div>
+</body>
+</html>

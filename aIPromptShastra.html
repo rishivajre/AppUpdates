@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Prompt Shastra-Your Daily Instant Prompt Generator</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .gradient-bg {
+      background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+    }
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .fade-in {
+      animation: fadeIn 0.7s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hover-scale {
+      transition: transform 0.15s;
+    }
+    .hover-scale:hover {
+      transform: scale(1.018);
+    }
+  </style>
+</head>
+<body class="gradient-bg min-h-screen">
+  <div class="container mx-auto px-4 py-8 max-w-4xl">
+    <div class="glass-effect rounded-2xl shadow-xl p-8 mb-8 fade-in">
+      <h1 class="text-4xl font-bold text-center mb-8 text-gray-800">
+        AI Prompt Shastra
+        <div class="text-lg font-normal text-gray-600 mt-2">Your Daily Instant Prompt Generator</div>
+      </h1>
+      
+      <!-- Topic Input -->
+      <div class="mb-6">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="topic">
+          Enter Topic
+        </label>
+        <input type="text" id="topic" 
+               class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all hover-scale"
+               placeholder="Enter a topic for prompt generation" />
+      </div>
+      
+      <!-- Complexity Level -->
+      <div class="mb-6">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="complexity">
+          Select Complexity Level
+        </label>
+        <select id="complexity" 
+                class="w-full px-4 py-auto rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all hover-scale">
+          <option value="basic">Basic</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="advanced">Advanced</option>
+        </select>
+      </div>
+      
+      <!-- Two Column Layout for Smaller Dropdowns -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <!-- Scenario Selection -->
+        <div>
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="scenario">
+            Choose Scenario
+          </label>
+          <select id="scenario" 
+                  class="w-full px-4 py-auto rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all hover-scale">
+            <option value="summary">Summary</option>
+            <option value="critique">Critique</option>
+            <option value="comparison">Comparison</option>
+            <option value="debate">Debate Mode</option>
+          </select>
+        </div>
+
+        <!-- Language Style -->
+        <div>
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="languageStyle">
+            Select Language Style
+          </label>
+          <select id="languageStyle" 
+                  class="w-full px-4 py-auto rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all hover-scale">
+            <option value="formal">Formal</option>
+            <option value="casual">Casual</option>
+            <option value="concise">Concise</option>
+          </select>
+        </div>
+      </div>
+      
+      <!-- Model Selection -->
+      <div class="mb-8">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="model">
+          Select AI Model
+        </label>
+        <select id="model" 
+                class="w-full px-4 py-auto rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all hover-scale">
+          <option value="chatGPT">ChatGPT</option>
+          <option value="bard">Bard</option>
+          <option value="claude">Claude</option>
+        </select>
+      </div>
+
+      <!-- Generate Button -->
+      <div class="text-center mb-8">
+        <button id="generatePrompt" 
+                class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg transition-all hover-scale focus:outline-none focus:ring-2 focus:ring-blue-400">
+          Generate Prompt
+        </button>
+      </div>
+
+      <!-- Error Message -->
+      <div id="error-message" class="text-red-500 text-center mb-4"></div>
+
+      <!-- Generated Prompt Output -->
+      <div class="relative">
+        <div id="generatedPrompt" 
+             class="bg-white p-6 rounded-lg border border-gray-200 min-h-[100px] mb-6 whitespace-pre-wrap">
+        </div>
+        <button id="copyPrompt" 
+                class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 focus:outline-none invisible">
+          <i class="fas fa-copy"></i>
+        </button>
+      </div>
+
+      <!-- Debug Mode -->
+      <div class="mb-8">
+        <div class="flex items-center justify-between mb-2">
+          <label class="block text-gray-700 text-sm font-bold" for="debug">
+            Debug Mode
+          </label>
+        </div>
+        <textarea id="debug" 
+                  class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all" 
+                  rows="7" 
+                  readonly></textarea>
+      </div>
+
+      <!-- Feedback Section -->
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="feedback">
+          Provide Feedback for Refinement
+        </label>
+        <textarea id="feedback" 
+                  class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all mb-4" 
+                  rows="4" 
+                  placeholder="Your feedback on the generated prompt..."></textarea>
+        <button id="submitFeedback" 
+                class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-lg transition-all hover-scale focus:outline-none focus:ring-2 focus:ring-green-400">
+          Submit Feedback
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+const generatePromptButton = document.getElementById('generatePrompt');
+    const topicInput = document.getElementById('topic');
+    const complexitySelect = document.getElementById('complexity');
+    const scenarioSelect = document.getElementById('scenario');
+    const languageStyleSelect = document.getElementById('languageStyle');
+    const modelSelect = document.getElementById('model');
+    const generatedPromptOutput = document.getElementById('generatedPrompt');
+    const errorMessage = document.getElementById('error-message');
+    const debugModeOutput = document.getElementById('debug');
+    const feedbackTextarea = document.getElementById('feedback');
+    const submitFeedbackButton = document.getElementById('submitFeedback');
+
+    // Handle errors
+    function showError(message) {
+      errorMessage.textContent = message;
+    }
+
+    // Clear error message
+    function clearError() {
+      errorMessage.textContent = '';
+    }
+
+    // Generate Prompt Logic
+    generatePromptButton.addEventListener('click', () => {
+      const topic = topicInput.value.trim();
+      const complexity = complexitySelect.value;
+      const scenario = scenarioSelect.value;
+      const languageStyle = languageStyleSelect.value;
+      const model = modelSelect.value;
+
+      if (!topic) {
+        showError('Please enter a topic.');
+        return;
+      }
+
+      clearError();
+      
+      let prompt = `Generate a prompt about "${topic}" with a ${complexity} level, focusing on a ${scenario} scenario. `;
+      
+      // Adjust for Language Style
+      if (languageStyle === 'formal') {
+        prompt += 'Use a formal tone. ';
+      } else if (languageStyle === 'casual') {
+        prompt += 'Use a casual tone. ';
+      } else if (languageStyle === 'concise') {
+        prompt += 'Provide a concise explanation. ';
+      }
+
+      // Adjust Complexity for Advanced Level
+      if (complexity === 'advanced') {
+        prompt += 'Include in-depth analysis, expert-level insights, and multiple viewpoints. ';
+      }
+
+      // Scenario-based Modifications
+      if (scenario === 'debate') {
+        prompt += 'Provide two opposing perspectives and analyze both sides critically. ';
+      } else if (scenario === 'critique') {
+        prompt += 'Provide a critical evaluation and point out the strengths and weaknesses. ';
+      } else if (scenario === 'comparison') {
+        prompt += 'Compare this with similar topics and provide differences and similarities. ';
+      } else if (scenario === 'summary') {
+        prompt += 'Summarize the key points succinctly. ';
+      }
+
+      // Model-Specific Adjustments
+      if (model === 'chatGPT') {
+        prompt += 'Ensure the response is suited to ChatGPT’s strengths in conversational and contextual understanding. ';
+      } else if (model === 'bard') {
+        prompt += 'Tailor the response for Bard’s creative and insightful approach. ';
+      } else if (model === 'claude') {
+        prompt += 'Ensure the response leverages Claude’s advanced reasoning and detail. ';
+      }
+
+      // Display Generated Prompt
+      generatedPromptOutput.textContent = prompt;
+      debugModeOutput.value = `Generated Prompt for ${model}:\n\n${prompt}`;
+    });
+
+    // Submit Feedback Logic
+    submitFeedbackButton.addEventListener('click', () => {
+      const feedback = feedbackTextarea.value.trim();
+      if (feedback) {
+        // Simulating storing feedback (could be sent to a server in real scenarios)
+        console.log('Feedback submitted:', feedback);
+        feedbackTextarea.value = ''; // Clear feedback input
+        alert('Thank you for your feedback!');
+      } else {
+        alert('Please provide feedback before submitting.');
+      }
+    });
+  </script>
+</body>
+</html>

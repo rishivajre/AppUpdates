@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Regex Tester & Validator</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #e8f5e9;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #e8f5e9;
+      box-shadow: 10px 10px 20px #c1d8c6, -10px -10px 20px #ffffff;
+      border-radius: 12px;
+      padding: 30px;
+      width: 100%;
+      max-width: 450px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.5em;
+      color: #2e7d32;
+      margin-bottom: 20px;
+    }
+
+    .input-label {
+      font-size: 1em;
+      color: #388e3c;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    .input-field {
+      background: #e8f5e9;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      margin-bottom: 15px;
+      box-shadow: inset 5px 5px 10px #c1d8c6, inset -5px -5px 10px #ffffff;
+      border-radius: 8px;
+      font-size: 1em;
+      color: #2e7d32;
+    }
+
+    .button {
+      background: #e8f5e9;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 10px;
+      box-shadow: 5px 5px 10px #c1d8c6, -5px -5px 10px #ffffff;
+      border-radius: 8px;
+      font-size: 1em;
+      color: #2e7d32;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .button:hover {
+      box-shadow: inset 5px 5px 10px #c1d8c6, inset -5px -5px 10px #ffffff;
+    }
+
+    .output {
+      background: #e8f5e9;
+      padding: 10px;
+      margin-top: 15px;
+      box-shadow: inset 5px 5px 10px #c1d8c6, inset -5px -5px 10px #ffffff;
+      border-radius: 8px;
+      color: #2e7d32;
+      font-size: 0.9em;
+      white-space: pre-wrap;
+      text-align: left;
+    }
+
+    .highlight {
+      background-color: #a5d6a7;
+      font-weight: bold;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+        width: 100%;
+      }
+
+      h1 {
+        font-size: 1.25em;
+      }
+
+      .input-field {
+        font-size: 0.9em;
+        padding: 8px;
+      }
+
+      .button {
+        font-size: 0.9em;
+        padding: 8px 16px;
+      }
+
+      .output {
+        font-size: 0.85em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.1em;
+      }
+
+      .input-field {
+        font-size: 0.85em;
+        padding: 7px;
+      }
+
+      .button {
+        font-size: 0.85em;
+        padding: 7px 14px;
+      }
+
+      .output {
+        font-size: 0.8em;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Regex Tester & Validator</h1>
+    <label class="input-label" for="regex-input">Enter Regex:</label>
+    <input type="text" id="regex-input" class="input-field" placeholder="e.g., ^[a-zA-Z0-9]+$">
+
+    <label class="input-label" for="test-input">Enter Test String:</label>
+    <textarea id="test-input" class="input-field" rows="4" placeholder="Enter your text here..."></textarea>
+
+    <button class="button" onclick="testRegex()">Test Regex</button>
+    <div class="output" id="output" style="display: none;"></div>
+  </div>
+
+  <script>
+    function testRegex() {
+      const regexInput = document.getElementById('regex-input').value;
+      const testInput = document.getElementById('test-input').value;
+      const outputDiv = document.getElementById('output');
+
+      if (!regexInput || !testInput) {
+        alert('Please fill in both fields.');
+        return;
+      }
+
+      try {
+        const regex = new RegExp(regexInput, 'g');
+        const matches = [...testInput.matchAll(regex)];
+        
+        if (matches.length) {
+          const highlightedText = testInput.replace(regex, match => `<span class="highlight">${match}</span>`);
+          outputDiv.innerHTML = `Matches Found:\n${highlightedText}`;
+        } else {
+          outputDiv.textContent = 'No matches found.';
+        }
+
+        outputDiv.style.display = 'block';
+      } catch (e) {
+        outputDiv.textContent = `Invalid Regex: ${e.message}`;
+        outputDiv.style.display = 'block';
+      }
+    }
+  </script>
+
+</body>
+</html>
