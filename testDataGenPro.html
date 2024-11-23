@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="your-css-file.css">
+    <style>
+        /* Modern CSS Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+:root {
+    --primary-color: #2563eb;
+    --primary-hover: #1d4ed8;
+    --secondary-color: #64748b;
+    --background-color: #f8fafc;
+    --card-background: #ffffff;
+    --border-color: #e2e8f0;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --success-color: #22c55e;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --radius-md: 0.5rem;
+    --radius-sm: 0.25rem;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+/* Container Layout */
+.td-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+/* Card Styling */
+.td-card {
+    background: var(--card-background);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+    height: fit-content;
+}
+
+/* Form Elements */
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 0.875rem;
+}
+
+select, input[type="number"], input[type="date"] {
+    width: 100%;
+    padding: 0.625rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background-color: var(--card-background);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+select:focus, input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Options Container */
+.options-container {
+    display: none;
+    background-color: var(--background-color);
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1rem;
+}
+
+/* Checkbox and Radio Styling */
+.checkbox-group, .format-options {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+input[type="checkbox"], input[type="radio"] {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--primary-color);
+}
+
+/* Button Styling */
+.button-group {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+}
+
+button {
+    padding: 0.625rem 1.25rem;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+button:first-child {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+button:first-child:hover {
+    background-color: var(--primary-hover);
+}
+
+button.secondary {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+button.secondary:hover {
+    background-color: var(--background-color);
+    border-color: var(--secondary-color);
+}
+
+/* Output Area */
+#output {
+    background-color: var(--background-color);
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    font-family: 'Courier New', monospace;
+    font-size: 0.875rem;
+    white-space: pre-wrap;
+    overflow-x: auto;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* Toast Notification */
+.toast {
+    display: none;
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    color: Black;
+    padding: 0.75rem 1rem;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive Design */
+/* Extra Large Screens (1440px and above) */
+@media (min-width: 1440px) {
+    .td-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        padding: 2rem;
+        max-width: 1400px;
+    }
+
+    .td-card {
+        padding: 2rem;
+    }
+
+    #output {
+        max-height: 600px;
+        font-size: 1rem;
+    }
+
+    .button-group {
+        gap: 1rem;
+    }
+
+    button {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+}
+
+/* Large Screens (1024px to 1439px) */
+@media (min-width: 1024px) and (max-width: 1439px) {
+    .td-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+        padding: 1.5rem;
+        max-width: 1200px;
+    }
+
+    .td-card {
+        padding: 1.75rem;
+    }
+
+    #output {
+        max-height: 500px;
+    }
+}
+
+/* Medium Screens (Tablets & Small Laptops, 768px to 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .td-container {
+        grid-template-columns: 1fr;
+        max-width: 800px;
+        padding: 1.25rem;
+        margin: 0 auto;
+    }
+
+    .td-card {
+        padding: 1.5rem;
+    }
+
+    .button-group {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 0.75rem;
+    }
+
+    #output {
+        max-height: 400px;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Small Tablets (600px to 767px) */
+@media (min-width: 600px) and (max-width: 767px) {
+    .td-container {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .td-card {
+        padding: 1.25rem;
+    }
+
+    .button-group {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+
+    #output {
+        max-height: 350px;
+        font-size: 0.8125rem;
+    }
+
+    .options-container {
+        padding: 0.875rem;
+    }
+}
+
+/* Large Mobile Devices (480px to 599px) */
+@media (min-width: 480px) and (max-width: 599px) {
+    .td-container {
+        grid-template-columns: 1fr;
+        padding: 0.75rem;
+        gap: 0.75rem;
+    }
+
+    .td-card {
+        padding: 1rem;
+    }
+
+    .button-group {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    button {
+        width: 100%;
+        padding: 0.625rem 1rem;
+    }
+
+    label {
+        font-size: 0.8125rem;
+    }
+
+    select, input[type="number"], input[type="date"] {
+        padding: 0.5rem;
+        font-size: 0.8125rem;
+    }
+
+    #output {
+        max-height: 300px;
+        font-size: 0.75rem;
+        padding: 0.75rem;
+    }
+}
+
+/* Small Mobile Devices (320px to 479px) */
+@media (max-width: 479px) {
+    .td-container {
+        grid-template-columns: 1fr;
+        padding: 0.5rem;
+        gap: 0.5rem;
+    }
+
+    .td-card {
+        padding: 0.875rem;
+    }
+
+    .form-group {
+        margin-bottom: 0.75rem;
+    }
+
+    .button-group {
+        flex-direction: column;
+        gap: 0.375rem;
+    }
+
+    button {
+        width: 100%;
+        padding: 0.5rem 0.875rem;
+        font-size: 0.8125rem;
+    }
+
+    label {
+        font-size: 0.75rem;
+        margin-bottom: 0.25rem;
+    }
+
+    select, input[type="number"], input[type="date"] {
+        padding: 0.4375rem;
+        font-size: 0.75rem;
+    }
+
+    .options-container {
+        padding: 0.75rem;
+    }
+
+    #output {
+        max-height: 250px;
+        font-size: 0.75rem;
+        padding: 0.625rem;
+    }
+
+    .toast {
+        left: 0.5rem;
+        right: 0.5rem;
+        bottom: 1rem;
+        font-size: 0.8125rem;
+        padding: 0.625rem 1rem;
+    }
+
+    .checkbox-group, .format-options {
+        gap: 0.375rem;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Portrait Orientation Specific Adjustments */
+@media (max-height: 600px) and (orientation: landscape) {
+    .td-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    #output {
+        max-height: 200px;
+    }
+
+    .td-card {
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+}
+
+/* High DPI Screens */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .td-card {
+        box-shadow: var(--shadow-sm);
+    }
+
+    button, select, input[type="number"], input[type="date"] {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+/* Hover Effects - Only on devices that support hover */
+@media (hover: hover) {
+    button:hover {
+        transform: translateY(-1px);
+    }
+
+    button:active {
+        transform: translateY(0);
+    }
+
+    select:hover, input[type="number"]:hover, input[type="date"]:hover {
+        border-color: var(--secondary-color);
+    }
+}
+
+/* Prevent Hover Effects on Touch Devices */
+@media (hover: none) {
+    button:hover {
+        transform: none;
+    }
+
+    select:hover, input[type="number"]:hover, input[type="date"]:hover {
+        border-color: var(--border-color);
+    }
+}
+    </style>
+</head>
+
+<body>
+    <!-- Keep the existing HTML structure but remove the style attribute from elements -->
+    <div class="td-container">
+        
+        <div class="td-card">
+            <!-- Keep the existing form content -->
+            <div class="form-group">
+                <label for="dataType">Data Type:</label>
+                <select id="dataType" onchange="updateOptions()">
+                    <option value="names">Full Names</option>
+                    <option value="emails">Email Addresses</option>
+                    <option value="numbers">Numbers</option>
+                    <option value="dates">Dates</option>
+                    <option value="phone">Phone Numbers</option>
+                    <option value="addresses">Addresses</option>
+                    <option value="creditCards">Credit Card Numbers</option>
+                    <option value="usernames">Usernames</option>
+                    <option value="passwords">Passwords</option>
+                    <option value="ipAddresses">IP Addresses</option>
+                    <option value="colors">Color Codes</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="count">Number of Items:</label>
+                <input type="number" id="count" value="5" min="1" max="1000">
+            </div>
+
+            <div id="numberOptions" class="options-container">
+                <div class="form-group">
+                    <label for="min">Minimum Value:</label>
+                    <input type="number" id="min" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="max">Maximum Value:</label>
+                    <input type="number" id="max" value="100">
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="decimals">
+                    <label for="decimals">Include Decimals</label>
+                </div>
+            </div>
+
+            <div id="dateOptions" class="options-container">
+                <div class="form-group">
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" id="startDate">
+                </div>
+                <div class="form-group">
+                    <label for="endDate">End Date:</label>
+                    <input type="date" id="endDate">
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="includeTime">
+                    <label for="includeTime">Include Time</label>
+                </div>
+            </div>
+
+            <div id="passwordOptions" class="options-container">
+                <div class="form-group">
+                    <label for="length">Password Length:</label>
+                    <input type="number" id="length" value="12" min="6" max="32">
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="uppercase" checked>
+                    <label for="uppercase">Uppercase</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="numbers" checked>
+                    <label for="numbers">Numbers</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="symbols" checked>
+                    <label for="symbols">Special Characters</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Output Format:</label>
+                <div class="format-options">
+                    <div class="checkbox-group">
+                        <input type="radio" name="format" id="formatJson" value="json" checked>
+                        <label for="formatJson">JSON</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="radio" name="format" id="formatCsv" value="csv">
+                        <label for="formatCsv">CSV</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="radio" name="format" id="formatSql" value="sql">
+                        <label for="formatSql">SQL</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button onclick="generateData()">Generate Data</button>
+                <button onclick="copyToClipboard()" class="secondary">Copy</button>
+                <button onclick="downloadData()" class="secondary">Download</button>
+            </div>
+        </div>
+
+        <div class="td-card">
+            <label>Generated Output:</label>
+            <div id="output"></div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- Keep the existing JavaScript -->
+    <script>
+        // Your existing JavaScript code remains unchanged
+        // Keep all the JavaScript functions from the original code
+        document.getElementById('startDate').valueAsDate = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
+        document.getElementById('endDate').valueAsDate = new Date();
+
+        const sampleData = {
+            firstNames: [
+                // Existing US names
+                'James', 'Mary', 'John', 'Patricia', 'Robert', 'Jennifer', 'Michael', 'Linda', 'William', 'Elizabeth',
+                'David', 'Susan', 'Richard', 'Jessica', 'Joseph', 'Sarah', 'Thomas', 'Karen', 'Charles', 'Nancy',
+                // Negative/Corrupt/Invalid names
+                '', '123456', '@!#$', 'null', 'undefined', 'NaN', '000000', 'name@name', '   ', 'NoName', '7777777',
+                'FakeName1', 'Test123', 'Invalid!@#',
+                'Daniel', 'Lisa', 'Matthew', 'Betty', 'Anthony', 'Margaret', 'Mark', 'Sandra', 'Donald', 'Ashley',
+                'Steven', 'Kimberly', 'Paul', 'Emily', 'Andrew', 'Donna', 'Joshua', 'Michelle', 'Kenneth', 'Carol',
+                'Kevin', 'Amanda', 'Brian', 'Dorothy', 'George', 'Melissa', 'Timothy', 'Deborah', 'Ronald', 'Stephanie',
+                // European names
+                'Liam', 'Emma', 'Lucas', 'Sophia', 'Oliver', 'Charlotte', 'Elias', 'Mia', 'Noah', 'Amelia',
+                'Hans', 'Anna', 'Klaus', 'Sofia', 'Francesco', 'Giulia', 'Giuseppe', 'Chiara', 'Marco', 'Elena',
+                'Jean', 'Marie', 'Pierre', 'Louise', 'Antoine', 'Claire', 'Henrik', 'Isabella', 'Anders', 'Astrid',
+                'Lars', 'Ingrid', 'Pavel', 'Natasha', 'Dmitri', 'Anastasia', 'Viktor', 'Olga', 'Ivan', 'Tatiana',
+                // Indian names
+                'Aarav', 'Aanya', 'Arjun', 'Zara', 'Vihaan', 'Anaya', 'Reyansh', 'Anika', 'Kabir', 'Ishita',
+                'Vivaan', 'Diya', 'Advik', 'Myra', 'Rudra', 'Prisha', 'Advaith', 'Aadhya', 'Atharv', 'Avni',
+                // Asian names
+                'Wei', 'Xia', 'Jun', 'Ming', 'Li', 'Hui', 'Jie', 'Ying', 'Feng', 'Hong',
+                'Hiroshi', 'Yuki', 'Takeshi', 'Sakura', 'Kenji', 'Akiko', 'Daisuke', 'Yumi', 'Kazuki', 'Haruka',
+                'Min-jun', 'Seo-yun', 'Ji-hun', 'Ha-eun', 'Jae-woo', 'Su-jin', 'Tae-hyun', 'Min-seo', 'Jung-hoon', 'Ye-jin'
+            ],
+            lastNames: [
+                // Existing US names
+                'Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez',
+                'Hernandez', 'Lopez', 'Gonzalez', 'Wilson', 'Anderson',
+                // Negative/Corrupt/Invalid names
+                '', '123456', '@!#$', 'null', 'undefined', 'NaN', '000000', 'lastname@domain', '   ', 'NoLastName', '7777777',
+                'TestSurname123', 'FakeLastName!', 'Invalid!@#',
+                'Thomas', 'Taylor', 'Moore', 'Jackson', 'Martin',
+                'Lee', 'Perez', 'Thompson', 'White', 'Harris', 'Sanchez', 'Clark', 'Ramirez', 'Lewis', 'Robinson',
+                'Walker', 'Young', 'Allen', 'King', 'Wright', 'Scott', 'Torres', 'Nguyen', 'Hill', 'Flores',
+                'Green', 'Adams', 'Nelson', 'Baker', 'Hall', 'Rivera', 'Campbell', 'Mitchell', 'Carter', 'Roberts',
+                // European surnames
+                'Mueller', 'Schmidt', 'Schneider', 'Fischer', 'Weber', 'Meyer', 'Wagner', 'Becker', 'Hoffmann', 'Schulz',
+                'Rossi', 'Ferrari', 'Esposito', 'Bianchi', 'Romano', 'Colombo', 'Bernard', 'Dubois', 'Thomas', 'Robert',
+                'Andersson', 'Johansson', 'Karlsson', 'Nilsson', 'Eriksson', 'Larsson', 'Petrov', 'Ivanov', 'Smirnov', 'Kuznetsov',
+                // Indian surnames
+                'Patel', 'Kumar', 'Singh', 'Shah', 'Sharma', 'Verma', 'Gupta', 'Malhotra', 'Kapoor', 'Mehra',
+                'Chopra', 'Bhat', 'Reddy', 'Nair', 'Pillai', 'Rao', 'Mehta', 'Joshi', 'Chauhan', 'Yadav',
+                // Asian surnames
+                'Wang', 'Li', 'Zhang', 'Liu', 'Chen', 'Yang', 'Huang', 'Zhao', 'Wu', 'Zhou',
+                'Tanaka', 'Suzuki', 'Sato', 'Takahashi', 'Watanabe', 'Ito', 'Yamamoto', 'Nakamura', 'Kobayashi', 'Kato',
+                'Kim', 'Lee', 'Park', 'Choi', 'Jung', 'Kang', 'Cho', 'Yoon', 'Jang', 'Lim'
+            ],
+            domains: [
+                // Existing domains
+                'example.com', 'testmail.com', 'mailinator.com', 'domain.com', 'samplemail.com',
+                'webmail.com', 'fakemail.com', 'testing.com', 'mydomain.com', 'freemail.com',
+                'corporate.net', 'business.org', 'startup.io', 'techmail.co', 'devmail.net',
+                // Negative/Corrupt/Invalid domains
+                '', 'invalid@domain', 'example@domain..com', '@invalid.com', 'test@.com', 'mail@com', 'fakedomain', 'not.a.domain', 'test..com',
+                'bad.domain@com', 'null@domain', 'undefined@domain.com', 'random@domain.#',
+                'fastmail.com', 'protonmail.com', 'securemail.org', 'privatemail.net', 'workmail.com',
+                // European domains
+                'mail.de', 'web.de', 'gmx.de', 'libero.it', 'tin.it', 'laposte.fr', 'orange.fr', 'mail.ru', 'yandex.ru',
+                // Indian domains
+                'rediff.com', 'indiatimes.com', 'sify.com', 'bharatmail.com', 'indianmail.com',
+                // Asian domains
+                'qq.com', '163.com', 'sina.com', 'sohu.com', 'yahoo.co.jp', 'naver.com', 'daum.net'
+            ],
+            cities: [
+                // Existing US cities
+                'New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'Philadelphia', 'San Antonio', 'San Diego', 'Dallas', 'San Jose',
+                // Negative/Corrupt/Invalid cities
+                '', '123City', '@!#$', 'null', 'undefined', 'NaN', 'FakeCity123', 'RandomCity!!', 'NoCity', '   ',
+                'InvalidCity', 'City123!@#', 'FakeCity!#',
+                'Austin', 'Jacksonville', 'Fort Worth', 'Columbus', 'San Francisco', 'Charlotte', 'Indianapolis', 'Seattle', 'Denver', 'Boston',
+                // European cities
+                'London', 'Paris', 'Berlin', 'Madrid', 'Rome', 'Amsterdam', 'Brussels', 'Vienna', 'Stockholm', 'Copenhagen',
+                'Oslo', 'Dublin', 'Prague', 'Warsaw', 'Budapest', 'Athens', 'Lisbon', 'Helsinki', 'Munich', 'Barcelona',
+                // Indian cities
+                'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Chennai', 'Kolkata', 'Pune', 'Ahmedabad', 'Jaipur', 'Surat',
+                'Lucknow', 'Kanpur', 'Nagpur', 'Indore', 'Thane', 'Bhopal', 'Coimbatore', 'Kochi', 'Chandigarh', 'Goa',
+                // Asian cities
+                'Tokyo', 'Shanghai', 'Beijing', 'Seoul', 'Singapore', 'Hong Kong', 'Bangkok', 'Taipei', 'Manila', 'Jakarta',
+                'Osaka', 'Yokohama', 'Guangzhou', 'Shenzhen', 'Kuala Lumpur', 'Ho Chi Minh City', 'Hanoi', 'Kyoto', 'Busan', 'Fukuoka'
+            ],
+            streets: [
+                // Existing streets
+                'Oak St', 'Maple St', 'Pine St', 'Cedar St', 'Elm St', 'Walnut St', 'Peach St', 'Cherry St', 'Birch St', 'Ash St',
+                'Main St', 'Washington St', 'Park Ave', 'Lake St', 'Hill Rd', 'River Rd', 'Market St', 'Church St', 'Bridge St', 'Highland Ave',
+
+                // European streets
+                'High Street', 'King Street', 'Queen Street', 'Rue de la Paix', 'Avenue des Champs-Élysées', 'Via Roma',
+                'Königsallee', 'Gran Via', 'Baker Street', 'Oxford Street', 'Nevsky Prospekt', 'Unter den Linden',
+                // Indian streets
+                'MG Road', 'Linking Road', 'Park Street', 'Commercial Street', 'Brigade Road', 'DLF Cyber City',
+                'Connaught Place', 'Chandni Chowk', 'Jubilee Hills', 'Bandra West',
+                // Asian streets
+                'Ginza', 'Nanjing Road', 'Orchard Road', 'Myeongdong', 'Nathan Road', 'Shinjuku', 'Shibuya',
+                'Causeway Bay', 'Tsim Sha Tsui', 'Omotesando'
+            ],
+            colors: [
+                // Existing colors
+                '#FF5733', '#33FF57', '#3357FF', '#FF33A1', '#A1FF33', '#FF5733', '#FFBD33', '#A333FF', '#33FFD7', '#FF3381',
+                '#4287f5', '#42f54b', '#f542aa', '#f5d142', '#42f5e3', '#f54242', '#8942f5', '#42f598', '#f59842', '#4842f5', // Negative/Corrupt/Invalid colors
+                '', '#0000000', '#GGGGGG', '#12345X', '#@@@', 'null', 'undefined', 'NaN', '#FF', '#12345!@#',
+                // Traditional European colors
+                '#840000', '#0F4D92', '#1B1B1B', '#873600', '#7B241C', '#145A32', '#1A5276', '#4A235A',
+                // Traditional Indian colors
+                '#FF9933', '#128807', '#000080', '#FF1A1A', '#FF8C00', '#FFD700', '#800080', '#FFA500',
+                // Traditional Asian colors
+                '#BC002D', '#FF4500', '#8B0000', '#C71585', '#FF69B4', '#4B0082', '#000000', '#B8860B',
+                '#006400', '#800000', '#008080', '#483D8B', '#2F4F4F', '#800080', '#A0522D', '#F4A460'
+            ],
+            suffixes: [
+                // Existing suffixes
+                'Dr', 'St', 'Ave', 'Ln', 'Blvd', 'Rd', 'Pl', 'Ct',
+                'Circle', 'Way', 'Trail', 'Pass', 'Pike', 'Highway', 'Route', 'Terrace',
+                // Negative/Corrupt/Invalid suffixes
+                '', '123', '@!#$', 'null', 'undefined', 'NaN', 'RandomSuffix', 'FakeSuffix1', 'Suffix@!#', '   ',
+                // European suffixes
+                'Strasse', 'Platz', 'Rue', 'Avenue', 'Piazza', 'Via', 'Plaza', 'Gasse',
+                // Indian suffixes
+                'Marg', 'Path', 'Nagar', 'Chowk', 'Layout', 'Colony', 'Garden', 'Society',
+                // Asian suffixes
+                'Dori', 'Lu', 'Jie', 'Ro', 'Gil', 'Dong'
+            ]
+        };
+
+        function updateOptions() {
+            document.querySelectorAll('.options-container').forEach(el => el.style.display = 'none');
+            const selectedType = document.getElementById('dataType').value;
+            if (selectedType === 'numbers') document.getElementById('numberOptions').style.display = 'block';
+            if (selectedType === 'dates') document.getElementById('dateOptions').style.display = 'block';
+            if (selectedType === 'passwords') document.getElementById('passwordOptions').style.display = 'block';
+        }
+
+        function generateData() {
+            const count = Math.min(Math.max(parseInt(document.getElementById('count').value), 1), 1000);
+            const dataType = document.getElementById('dataType').value;
+            const format = document.querySelector('input[name="format"]:checked').value;
+
+            const output = [];
+            for (let i = 0; i < count; i++) {
+                output.push(generateSingleData(dataType));
+            }
+
+            const formattedOutput = formatData(output, format);
+            document.getElementById('output').textContent = formattedOutput;
+        }
+
+        function generateSingleData(type) {
+            switch (type) {
+                case 'names':
+                    return `${randomFrom(sampleData.firstNames)} ${randomFrom(sampleData.lastNames)}`;
+                case 'emails':
+                    return `${randomFrom(sampleData.firstNames).toLowerCase()}.${randomFrom(sampleData.lastNames).toLowerCase()}@${randomFrom(sampleData.domains)}`;
+                case 'numbers':
+                    return generateNumber();
+                case 'dates':
+                    return generateDate();
+                case 'phone':
+                    return generatePhoneNumber();
+                case 'addresses':
+                    return `${Math.floor(Math.random() * 9999)} ${randomFrom(sampleData.streets)}, ${randomFrom(sampleData.cities)}`;
+                case 'creditCards':
+                    return generateCreditCard();
+                case 'usernames':
+                    return `${randomFrom(sampleData.firstNames).toLowerCase()}_${Math.floor(Math.random() * 9999)}`;
+                case 'passwords':
+                    return generatePassword();
+                case 'ipAddresses':
+                    return `${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`;
+                case 'colors':
+                    return randomFrom(sampleData.colors);
+            }
+        }
+
+        function generateNumber() {
+            const min = parseInt(document.getElementById('min').value) || 0;
+            const max = parseInt(document.getElementById('max').value) || 100;
+            const decimals = document.getElementById('decimals').checked;
+            const num = min + Math.random() * (max - min);
+            return decimals ? num.toFixed(2) : Math.floor(num);
+        }
+
+        function generateDate() {
+            const start = new Date(document.getElementById('startDate').value).getTime();
+            const end = new Date(document.getElementById('endDate').value).getTime();
+            const randomDate = new Date(start + Math.random() * (end - start));
+            return document.getElementById('includeTime').checked ? randomDate.toLocaleString() : randomDate.toLocaleDateString();
+        }
+
+        function generatePhoneNumber() {
+            const areaCode = Math.floor(100 + Math.random() * 900);
+            const centralOfficeCode = Math.floor(100 + Math.random() * 900);
+            const lineNumber = Math.floor(1000 + Math.random() * 9000);
+            return `(${areaCode}) ${centralOfficeCode}-${lineNumber}`;
+        }
+
+        function generateCreditCard() {
+            const cardNumber = Array.from({
+                length: 4
+            }, () => Math.floor(1000 + Math.random() * 9000)).join(" ");
+            return cardNumber;
+        }
+
+        function generatePassword() {
+            const length = parseInt(document.getElementById('length').value);
+            const includeUppercase = document.getElementById('uppercase').checked;
+            const includeNumbers = document.getElementById('numbers').checked;
+            const includeSymbols = document.getElementById('symbols').checked;
+
+            const lower = 'abcdefghijklmnopqrstuvwxyz';
+            const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const numbers = '0123456789';
+            const symbols = '!@#$%^&*()_-+=<>?';
+
+            let chars = lower;
+            if (includeUppercase) chars += upper;
+            if (includeNumbers) chars += numbers;
+            if (includeSymbols) chars += symbols;
+
+            return Array.from({
+                length
+            }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+        }
+
+        function formatData(data, format) {
+            switch (format) {
+                case 'json':
+                    return JSON.stringify(data, null, 2);
+                case 'csv':
+                    return data.map(item => `"${item}"`).join("\n");
+                case 'sql':
+                    return data.map(item => `INSERT INTO table_name (column_name) VALUES ('${item}');`).join("\n");
+                default:
+                    return data.join("\n");
+            }
+        }
+
+        function copyToClipboard() {
+            const output = document.getElementById('output').textContent;
+            navigator.clipboard.writeText(output).then(() => showToast());
+        }
+
+        function downloadData() {
+            const output = document.getElementById('output').textContent;
+            const blob = new Blob([output], {
+                type: 'text/plain'
+            });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `test_data_${Date.now()}.txt`;
+            link.click();
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.style.display = 'block';
+            setTimeout(() => toast.style.display = 'none', 3000);
+        }
+
+        function randomFrom(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+    </script>
+</body>
+
+</html>
